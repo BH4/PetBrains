@@ -199,7 +199,7 @@ class smartCell(cell):
         
         dist=(self.x-f.x)**2+(self.y-f.y)**2
         if dist<self.getRad()**2:
-            print 'eat stuff'
+            print 'eat'
             #need to erase old food
             f.erase()
             
@@ -207,34 +207,84 @@ class smartCell(cell):
 
             #draw new cell
             self.display()
+            self.health=100.0
 
             #cell was eaten return True
             return True
         return False
 
     def frame(self,foodList):
+        self.health-=.1
+        if self.health<=0:
+            self.dead=True
+        
         self.erase()
 
-        cfood=findClosest(foodList,self.x,self.y)
+        [ind,cfood]=foodList.closest(self.x,self.y)
         In=[cfood.x,cfood.y,self.x,self.y]
         self.move(In)
 
+        #test if i am close enough to eat that close food
 
         self.bounce()
         self.display()
 
+        if eaten:
+            return ind
+        return None
+
+class cellList:
+    def __init__(self,num,Type):
+        self.cells=randPos(num,Type)
+
+    def frames(self,foodList):
+        for f in foodList.cells:
+            f.frame()
+        
+        dead=[]
+        for i,c in enumerate(self.cells):
+            ind=c.frame(foodList)
+            
+            if not ind==None:#some food was eaten,get rid of it
+                del foodList.cells[ind]
+
+            if c.dead:
+                dead.append(i)
+
+        for i in dead:
+            del self.cells[i]
+
+        #do i need to return those things?
+                
+            
+    def closest(self,x,y):
+        cdist=10**10
+        cell=None
+        ind=None
+
+        for i,c in enumerate(self.cells):
+            if not c.dead:
+                dist=(c.x-x)**2+(c.y-y)**2
+                if dist<cdist:
+                    cdist=dist
+                    cell=c
+
+        return [ind,cell]
+
+"""  
 def findClosest(cellList,x,y):
     cdist=10**10
     cell=None
 
     for c in cellList:
-        dist=(c.x-x)**2+(c.y-y)**2
-        if dist<cdist:
-            cdist=dist
-            cell=c
+        if not c.dead:
+            dist=(c.x-x)**2+(c.y-y)**2
+            if dist<cdist:
+                cdist=dist
+                cell=c
 
     return cell
-
+"""
     
 def addVectors((a1,l1),(a2,l2)):
     x  = math.sin(a1) * l1 + math.sin(a2) * l2
@@ -284,8 +334,8 @@ x=width/2
 y=height/2
 cells=[cell((x-rad*math.cos(testa),y+rad*math.sin(testa)),(.2,testa),10), cell((x+rad*math.cos(testa),y-rad*math.sin(testa)),(.6,math.pi+testa),5)]
 """
-cells=randPos(20,smartCell)
-foodList=randPos(100,food)
+pets=cellList(20,smartCell)
+foods=cellList(100,food)
 
 while 1:
     for event in pygame.event.get():
@@ -293,15 +343,15 @@ while 1:
             pygame.quit()
             sys.exit()
 
+
+    pets.frames(foods)
+    pygame.display.flip()
+"""
     deadCells=[]
     for i,c in enumerate(cells):
         if not c.dead:
             c.frame(foodList)
-            cfood=findClosest(foodList,c.x,c.y)
-            if not cfood.dead:
-                c.absorb(cfood)
-            
-            
+
         if c.dead:
             deadCells.append(i)
 
@@ -319,5 +369,5 @@ while 1:
 
     for i in deadFood:
         del foodList[i]
-
-    pygame.display.flip()
+"""
+    
