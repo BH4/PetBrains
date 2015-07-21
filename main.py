@@ -151,6 +151,9 @@ class food(cell):
         #of the cells list once they have been eaten
         self.dead=False
 
+    def frame(self):
+        self.erase()
+        self.display()
 
 class smartCell(cell):
     def __init__(self,(x,y)):
@@ -161,7 +164,7 @@ class smartCell(cell):
         self.y=y
         self.color=(255,0,0)
         self.thickness=1
-        self.mass=10
+        self.mass=20
 
         #dead attribute is used to mark cells so that they can be taken out
         #of the cells list once they have been eaten
@@ -192,12 +195,27 @@ class smartCell(cell):
         elif self.y < self.getRad():
             self.y = 2*self.getRad() - self.y
 
-    
+    def absorb(self,f):
+        
+        dist=(self.x-f.x)**2+(self.y-f.y)**2
+        if dist<self.getRad()**2:
+            print 'eat stuff'
+            #need to erase old food
+            f.erase()
+            
+            f.dead=True
+
+            #draw new cell
+            self.display()
+
+            #cell was eaten return True
+            return True
+        return False
 
     def frame(self,foodList):
         self.erase()
 
-        cfood=findCloset(foodList,self.x,self.y)
+        cfood=findClosest(foodList,self.x,self.y)
         In=[cfood.x,cfood.y,self.x,self.y]
         self.move(In)
 
@@ -238,8 +256,27 @@ def randCellList(num):
 
     return cells
 
+def randFood(num):
+    f=[]
+    for i in xrange(num):
+        x=random()*width
+        y=random()*height
+        f.append(food((x,y)))
 
-cells=randCellList(20)
+    return f
+
+def randPos(num,Type):
+    l=[]
+    for i in xrange(num):
+        x=random()*width
+        y=random()*height
+        l.append(Type((x,y)))
+
+    return l
+                 
+
+
+#cells=randCellList(20)
 """
 testa=7*math.pi/6
 rad=150
@@ -247,7 +284,9 @@ x=width/2
 y=height/2
 cells=[cell((x-rad*math.cos(testa),y+rad*math.sin(testa)),(.2,testa),10), cell((x+rad*math.cos(testa),y-rad*math.sin(testa)),(.6,math.pi+testa),5)]
 """
-#cells=[smartCell(200,200)]
+cells=randPos(20,smartCell)
+foodList=randPos(100,food)
+
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -257,11 +296,10 @@ while 1:
     deadCells=[]
     for i,c in enumerate(cells):
         if not c.dead:
-            c.frame(cells)
-            for j in xrange(i+1,len(cells)):
-                s=cells[j]
-                if not s.dead:
-                    s.absorb(c)
+            c.frame(foodList)
+            cfood=findClosest(foodList,c.x,c.y)
+            if not cfood.dead:
+                c.absorb(cfood)
             
             
         if c.dead:
@@ -270,5 +308,16 @@ while 1:
     for i in deadCells:
         del cells[i]
 
+
+    deadFood=[]
+    for i,f in enumerate(foodList):
+        if not f.dead:
+            f.frame()
+
+        if f.dead:
+            deadFood.append(i)
+
+    for i in deadFood:
+        del foodList[i]
 
     pygame.display.flip()
