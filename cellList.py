@@ -12,6 +12,14 @@ def randPos(num,Type):
 
     return l
 
+def findInWheel(a,lis):
+    #need to find the index of the first element of the roulette wheel which is greater than a
+    #once we find this then we return this index -1 so that the number coresponds to
+    #the index of the correct cell in the generation list
+    lam=lambda x:a<x
+    ind=(i for i,v in enumerate(lis) if lam(v)).next()
+    return ind-1
+
 class cellList:
     def __init__(self,num,numFood):
         self.cells=randPos(num,smartCell)
@@ -71,6 +79,34 @@ class cellList:
             pygame.display.flip()
 
     def breed(self):
-        print 'nope'
         #breeds all of the cells in a cellList (that has been run thorugh a generation) selectivly based on fitness
         #returns new cellList of the offspring with some mutations
+        newCells=[]
+
+        g=lambda x:x[0]
+        totFit=sum(map(g,self.generation))
+
+        rouletteWheel=[0.0]
+        for i,c in enumerate(self.generation):
+            rouletteWheel.append(rouletteWheel[i]+c[0]/totFit)
+
+        #print rouletteWheel
+        for i in xrange(numCells):
+            a=np.random.random()
+            b=np.random.random()
+            indA=findInWheel(a,rouletteWheel)
+            indB=findInWheel(b,rouletteWheel)
+
+            #need to write the breed method in cells then finally in brain
+            self.generation[indA].breed(self.generation[indB])
+
+
+
+
+
+
+
+
+
+
+        

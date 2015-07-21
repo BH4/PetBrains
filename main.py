@@ -22,8 +22,9 @@ screen.fill(bgColor)
 cell.screen=screen
 
 
-pets=cellList(20,100)
+pets=cellList(numCells,numFood)
 pets.runGen()
+pets.breed()
 """
 while 1:
     for event in pygame.event.get():

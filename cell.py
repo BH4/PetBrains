@@ -49,7 +49,7 @@ class smartCell(cell):
         self.thickness=1
         self.mass=20
 
-        self.fitness=0
+        self.fitness=0.0
 
         #dead attribute is used to mark cells so that they can be taken out
         #of the cells list once they have been eaten
