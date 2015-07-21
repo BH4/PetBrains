@@ -199,7 +199,6 @@ class smartCell(cell):
         
         dist=(self.x-f.x)**2+(self.y-f.y)**2
         if dist<self.getRad()**2:
-            print 'eat'
             #need to erase old food
             f.erase()
             
@@ -225,6 +224,7 @@ class smartCell(cell):
         self.move(In)
 
         #test if i am close enough to eat that close food
+        eaten=self.absorb(cfood)
 
         self.bounce()
         self.display()
@@ -249,11 +249,12 @@ class cellList:
                 del foodList.cells[ind]
 
             if c.dead:
-                dead.append(i)
+                dead.append(c)
 
-        for i in dead:
-            del self.cells[i]
-
+        nonDead=[x for x in self.cells if not x.dead]
+        self.cells=nonDead
+        for c in dead:
+            c.erase()
         #do i need to return those things?
                 
             
@@ -268,6 +269,7 @@ class cellList:
                 if dist<cdist:
                     cdist=dist
                     cell=c
+                    ind=i
 
         return [ind,cell]
 
