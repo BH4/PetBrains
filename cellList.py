@@ -1,3 +1,4 @@
+import pygame,sys
 import numpy as np
 from settings import *
 from cell import cell,smartCell
@@ -55,11 +56,19 @@ class cellList:
 
         return [ind,cell]
 
-    def generation(self,food):
-        print 'nope'
+    
+    
+    def runGen(self):
         #runs until all of the cells in this set are dead.
         #populates the cellList generation attribute with a list of cells and their fitness
-        
+        while len(self.cells)>0:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            self.frames()
+            pygame.display.flip()
 
     def breed(self):
         print 'nope'

@@ -23,7 +23,8 @@ cell.screen=screen
 
 
 pets=cellList(20,100)
-
+pets.runGen()
+"""
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -33,5 +34,7 @@ while 1:
 
     pets.frames()
     pygame.display.flip()
-
+"""
     
+pygame.quit()
+sys.exit()
