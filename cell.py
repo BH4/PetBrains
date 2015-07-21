@@ -1,6 +1,7 @@
 from settings import *
 from brain import brain
 import numpy as np
+import pygame
 
 class cell:
     screen=None
@@ -12,6 +13,7 @@ class cell:
         self.color=(255,0,0)
         self.thickness=1
         self.mass=2
+
 
         #dead attribute is used to mark cells so that they can be taken out
         #of the cells list once they have been eaten
@@ -46,6 +48,8 @@ class smartCell(cell):
         self.color=(255,0,0)
         self.thickness=1
         self.mass=20
+
+        self.fitness=0
 
         #dead attribute is used to mark cells so that they can be taken out
         #of the cells list once they have been eaten
@@ -88,19 +92,20 @@ class smartCell(cell):
             #draw new cell
             self.display()
             self.health=100.0
+            self.fitness+=1
 
             #cell was eaten return True
             return True
         return False
 
-    def frame(self,foodList):
+    def frame(self,cells):
         self.health-=.1
         if self.health<=0:
             self.dead=True
         
         self.erase()
 
-        [ind,cfood]=foodList.closest(self.x,self.y)
+        [ind,cfood]=cells.closestFood(self.x,self.y)
         In=[cfood.x,cfood.y,self.x,self.y]
         self.move(In)
 

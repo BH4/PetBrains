@@ -1,5 +1,6 @@
 import numpy as np
 from settings import *
+from cell import cell,smartCell
 
 def randPos(num,Type):
     l=[]
@@ -11,22 +12,26 @@ def randPos(num,Type):
     return l
 
 class cellList:
-    def __init__(self,num,Type):
-        self.cells=randPos(num,Type)
+    def __init__(self,num,numFood):
+        self.cells=randPos(num,smartCell)
+        self.generation=[]
 
-    def frames(self,foodList):
-        for f in foodList.cells:
+        self.foodList=randPos(numFood,cell)
+
+    def frames(self):
+        for f in self.foodList:
             f.frame()
         
         dead=[]
         for i,c in enumerate(self.cells):
-            ind=c.frame(foodList)
+            ind=c.frame(self)
             
             if not ind==None:#some food was eaten,get rid of it
-                del foodList.cells[ind]
+                del self.foodList[ind]
 
             if c.dead:
                 dead.append(c)
+                self.generation.append((c.fitness,c))
 
         nonDead=[x for x in self.cells if not x.dead]
         self.cells=nonDead
@@ -35,12 +40,12 @@ class cellList:
         #do i need to return those things?
                 
             
-    def closest(self,x,y):
+    def closestFood(self,x,y):
         cdist=10**10
         cell=None
         ind=None
 
-        for i,c in enumerate(self.cells):
+        for i,c in enumerate(self.foodList):
             if not c.dead:
                 dist=(c.x-x)**2+(c.y-y)**2
                 if dist<cdist:
@@ -50,3 +55,13 @@ class cellList:
 
         return [ind,cell]
 
+    def generation(self,food):
+        print 'nope'
+        #runs until all of the cells in this set are dead.
+        #populates the cellList generation attribute with a list of cells and their fitness
+        
+
+    def breed(self):
+        print 'nope'
+        #breeds all of the cells in a cellList (that has been run thorugh a generation) selectivly based on fitness
+        #returns new cellList of the offspring with some mutations

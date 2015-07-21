@@ -22,8 +22,7 @@ screen.fill(bgColor)
 cell.screen=screen
 
 
-pets=cellList(20,smartCell)
-foods=cellList(100,cell)
+pets=cellList(20,100)
 
 while 1:
     for event in pygame.event.get():
@@ -32,7 +31,7 @@ while 1:
             sys.exit()
 
 
-    pets.frames(foods)
+    pets.frames()
     pygame.display.flip()
 
     
