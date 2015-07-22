@@ -29,14 +29,15 @@ class cellList:
 
     def frames(self):
         for f in self.foodList:
-            f.frame()
+            if not f.dead:
+                f.frame()
         
         dead=[]
         for i,c in enumerate(self.cells):
             ind=c.frame(self)
-            
+
             if not ind==None:#some food was eaten,get rid of it
-                del self.foodList[ind]
+                self.foodList[ind].reset()
 
             if c.dead:
                 dead.append(c)
@@ -86,6 +87,14 @@ class cellList:
         #returns new cellList of the offspring with some mutations
         newCells=[]
 
+        
+        #select only top 10 for some reason
+        n=[]
+        self.generation.sort(reverse=True)
+        for i in xrange(10):
+            n.append(self.generation[i])
+        self.generation=n
+
         g=lambda x:x[0]
         totFit=sum(map(g,self.generation))
 
@@ -93,13 +102,16 @@ class cellList:
         for i,c in enumerate(self.generation):
             rouletteWheel.append(rouletteWheel[i]+c[0]/totFit)
 
+        
         #print rouletteWheel
         for i in xrange(numCells):
             a=np.random.random()
             b=np.random.random()
             indA=findInWheel(a,rouletteWheel)
             indB=findInWheel(b,rouletteWheel)
-
+            
+            #print a
+            #print indA
             
             x=np.random.random()*width
             y=np.random.random()*height

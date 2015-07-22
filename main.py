@@ -33,17 +33,9 @@ for i in xrange(numGenerations-1):
     pets.breed()
     stats=pets.runGen()
 
-"""
-while 1:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+string="Generation " + str(i) + ": Max Fitness="+str(stats[0])
+print string
 
-
-    pets.frames()
-    pygame.display.flip()
-"""
     
 pygame.quit()
 sys.exit()

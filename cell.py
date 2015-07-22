@@ -37,6 +37,11 @@ class cell:
         self.erase()
         self.display()
 
+    def reset(self):
+        self.x=np.random.random()*width
+        self.y=np.random.random()*height
+        self.dead=False
+
 
 class smartCell(cell):
     def __init__(self,(x,y)):
@@ -69,6 +74,25 @@ class smartCell(cell):
             self.y-=velocity
 
     def bounce(self):
+        if self.x > width:
+            self.erase()
+            self.x = self.x-width
+            self.display()
+        elif self.x < 0:
+            self.erase()
+            self.x = width+self.x
+            self.display()
+     
+        if self.y > height:
+            self.erase()
+            self.y = self.y-height
+            self.display()
+     
+        elif self.y < 0:
+            self.erase()
+            self.y = height+self.y
+            self.display()
+        """
         if self.x > width - self.getRad():
             self.x = 2*(width - self.getRad()) - self.x
         elif self.x < self.getRad():
@@ -79,6 +103,7 @@ class smartCell(cell):
      
         elif self.y < self.getRad():
             self.y = 2*self.getRad() - self.y
+        """
 
     def absorb(self,f):
         
@@ -106,7 +131,12 @@ class smartCell(cell):
         self.erase()
 
         [ind,cfood]=cells.closestFood(self.x,self.y)
-        In=[cfood.x,cfood.y,self.x,self.y]
+        foodList=cells.foodList
+        In=[self.x,self.y]
+        for f in foodList:
+            In.append(f.x)
+            In.append(f.y)
+
         self.move(In)
 
         #test if i am close enough to eat that close food

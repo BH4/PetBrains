@@ -3,18 +3,19 @@ height = 600
 bgColor=(0,0,0)
 
 
-numCells=20
-numFood=100
-numGenerations=1000
+numCells=50
+numFood=20
+numGenerations=3000
 
 #cell
-velocity=3
-framesWithoutFood=50
+velocity=10
+framesWithoutFood=100
 maxHealth=100.0
 healthSub=maxHealth/framesWithoutFood
 
 #brain
-numInputs=4
+#inputs are x,y,deathState of food and its own xy coordinates
+numInputs=numFood*2+2#4
 numOutputs=4
 numHiddenLayers=1
 numPerHidden=5
