@@ -2,6 +2,7 @@ import pygame,sys
 import numpy as np
 from settings import *
 from cell import cell,smartCell
+from time import time,sleep
 
 def randPos(num,Type):
     l=[]
@@ -23,6 +24,7 @@ def findInWheel(a,lis):
 class cellList:
     def __init__(self,num,numFood):
         self.cells=randPos(num,smartCell)
+        self.cells[0].makeSuperSmart()
         self.generation=[]
 
         self.foodList=randPos(numFood,cell)
@@ -38,6 +40,7 @@ class cellList:
 
             if not ind==None:#some food was eaten,get rid of it
                 self.foodList[ind].reset()
+                #self.foodList[ind].dead=False
 
             if c.dead:
                 dead.append(c)
@@ -70,7 +73,8 @@ class cellList:
     def runGen(self):
         #runs until all of the cells in this set are dead.
         #populates the cellList generation attribute with a list of cells and their fitness
-        while len(self.cells)>0:
+        t=time()
+        while len(self.cells)>0 and time()-t<20:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -78,7 +82,12 @@ class cellList:
 
             self.frames()
             pygame.display.flip()
+            #sleep(.05)
 
+        #append the remaining living cells
+        for c in self.cells:
+            self.generation.append((c.fitness,c))
+        
         s=sorted(self.generation)[-1]
         return s
 
@@ -87,14 +96,14 @@ class cellList:
         #returns new cellList of the offspring with some mutations
         newCells=[]
 
-        
+        """
         #select only top 10 for some reason
         n=[]
         self.generation.sort(reverse=True)
         for i in xrange(10):
             n.append(self.generation[i])
         self.generation=n
-
+        """
         g=lambda x:x[0]
         totFit=sum(map(g,self.generation))
 

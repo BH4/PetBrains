@@ -3,6 +3,12 @@ from brain import brain
 import numpy as np
 import pygame
 
+def colorSelector(c1,c2):
+    if c1[2]==255 or c2[2]==255:
+        return (0,0,255)
+    return (255,0,0)
+
+
 class cell:
     screen=None
     
@@ -132,10 +138,12 @@ class smartCell(cell):
 
         [ind,cfood]=cells.closestFood(self.x,self.y)
         foodList=cells.foodList
-        In=[self.x,self.y]
+        In=[self.x,self.y,cfood.x,cfood.y]
+        """
         for f in foodList:
             In.append(f.x)
             In.append(f.y)
+        """
 
         self.move(In)
 
@@ -155,7 +163,14 @@ class smartCell(cell):
         newBrain=self.brain.breed(other.brain)
         newCell.brain=newBrain
 
+        newCell.color=colorSelector(self.color,other.color)
+
         return newCell
+
+    def makeSuperSmart(self):
+        self.brain.makeSuperSmart()
+        self.color=(0,0,255)
+
 
 
         

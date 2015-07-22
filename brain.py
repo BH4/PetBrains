@@ -84,3 +84,16 @@ class brain:
         newbrain.syn=newSyn
 
         return newbrain
+
+    def makeSuperSmart(self):
+        s=np.zeros([numOutputs,numInputs])
+        s[0,0]=-1
+        s[0,2]=1
+        s[1,1]=-1
+        s[1,3]=1
+        s[2,0]=1
+        s[2,2]=-1
+        s[3,1]=1
+        s[3,3]=-1
+
+        self.syn=[s]
