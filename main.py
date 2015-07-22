@@ -1,10 +1,7 @@
 #next steps
-#create a cell that i can control
-#center screen on my cell and allow cells to move outside of screen (difficult)
-#give cells ai so they try to eat the closest smaller cell
-#give cells a max speed based on their mass
-#make dumb cells that are smaller than initial smart cells. dumb cells dont move
-
+#increase the size of the space cells can move in
+#make it so the field of view can change by using the mouse
+#change settings so that it ends up being less dense with cells
 
 import pygame,sys
 import numpy as np
@@ -17,13 +14,13 @@ from cell import cell,smartCell
 from settings import *
 screen = pygame.display.set_mode((width, height))
 screen.fill(bgColor)
+screenPos=[0,0]
 
 #we need to pass the screen to the cell class so that it can use it.
 cell.screen=screen
-
+cell.screenPos=screenPos
 
 pets=cellList(numCells,numFood)
-
 
 stats=pets.runGen()
 for i in xrange(numGenerations-1):

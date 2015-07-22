@@ -11,6 +11,8 @@ def colorSelector(c1,c2):
 
 class cell:
     screen=None
+    #top left corner of the screen
+    screenPos=None
     
     #basic unit of the game
     def __init__(self,(x,y)):
@@ -31,21 +33,21 @@ class cell:
     
     #draws a circle representing the cell
     def display(self):
-        pygame.draw.circle(cell.screen, self.color, (int(self.x),int(self.y)), int(self.getRad()), self.thickness)
+        pygame.draw.circle(cell.screen, self.color, (int(self.x-cell.screenPos[0]),int(self.y-cell.screenPos[1])), int(self.getRad()), self.thickness)
 
     #draws a circle in the same position as the cell but in the background color
     #hopefully this method is faster than drawing over the entire screen with
     #screen.fill(bgColor)
     def erase(self):
-        pygame.draw.circle(cell.screen, bgColor, (int(self.x),int(self.y)), int(self.getRad()), self.thickness)
+        pygame.draw.circle(cell.screen, bgColor, (int(self.x-cell.screenPos[0]),int(self.y-cell.screenPos[1])), int(self.getRad()), self.thickness)
     
     def frame(self):
         self.erase()
         self.display()
 
     def reset(self):
-        self.x=np.random.random()*width
-        self.y=np.random.random()*height
+        self.x=np.random.random()*(maxx-minx)+minx
+        self.y=np.random.random()*(maxy-miny)+miny
         self.dead=False
 
 
@@ -111,16 +113,15 @@ class smartCell(cell):
             self.y = height+self.y
             self.display()
         """
-        if self.x > width - self.getRad():
-            self.x = 2*(width - self.getRad()) - self.x
-        elif self.x < self.getRad():
-            self.x = 2*self.getRad() - self.x
+        if self.x > maxx - self.getRad():
+            self.x = 2*(maxx - self.getRad()) - self.x
+        elif self.x < minx + self.getRad():
+            self.x = 2*(minx + self.getRad()) - self.x
      
-        if self.y > height - self.getRad():
-            self.y = 2*(height - self.getRad()) - self.y
-     
-        elif self.y < self.getRad():
-            self.y = 2*self.getRad() - self.y
+        if self.y > maxy - self.getRad():
+            self.y = 2*(maxy - self.getRad()) - self.y
+        elif self.y < miny + self.getRad():
+            self.y = 2*(miny + self.getRad()) - self.y
         
 
     def absorb(self,f):
@@ -150,7 +151,7 @@ class smartCell(cell):
 
         [ind,cfood]=cells.closestFood(self.x,self.y)
         foodList=cells.foodList
-        In=[self.x,self.y,cfood.x,cfood.y]
+        In=[self.x,self.y,cfood.x,cfood.y,minx,miny,maxx,maxy]
         """
         for f in foodList:
             In.append(f.x)

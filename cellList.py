@@ -7,8 +7,8 @@ from time import time,sleep
 def randPos(num,Type):
     l=[]
     for i in xrange(num):
-        x=np.random.random()*width
-        y=np.random.random()*height
+        x=np.random.random()*(maxx-minx)+minx
+        y=np.random.random()*(maxy-miny)+miny
         l.append(Type((x,y)))
 
     return l
@@ -17,14 +17,17 @@ def findInWheel(a,lis):
     #need to find the index of the first element of the roulette wheel which is greater than a
     #once we find this then we return this index -1 so that the number coresponds to
     #the index of the correct cell in the generation list
-    lam=lambda x:a<x
-    ind=(i for i,v in enumerate(lis) if lam(v)).next()
-    return ind-1
+    if not lis is None:
+        lam=lambda x:a<x
+        ind=(i for i,v in enumerate(lis) if lam(v)).next()
+        return ind-1
+    else:
+        return int(np.random.uniform(0,numCells))
 
 class cellList:
     def __init__(self,num,numFood):
         self.cells=randPos(num,smartCell)
-        self.cells[0].makeSuperSmart()
+        #self.cells[0].makeSuperSmart()
         self.generation=[]
 
         self.foodList=randPos(numFood,cell)
@@ -71,6 +74,7 @@ class cellList:
     
     
     def runGen(self):
+        screenPos=cell.screenPos
         #runs until all of the cells in this set are dead.
         #populates the cellList generation attribute with a list of cells and their fitness
         t=time()
@@ -80,6 +84,7 @@ class cellList:
                     pygame.quit()
                     sys.exit()
 
+            
             self.frames()
             pygame.display.flip()
             #sleep(.05)
@@ -109,11 +114,14 @@ class cellList:
         totFit=sum(map(g,self.generation))
 
         numCellsWithFitNonZero=0
-        rouletteWheel=[0.0]
-        for i,c in enumerate(self.generation):
-            if c[0]>0:
-                numCellsWithFitNonZero+=1
-            rouletteWheel.append(rouletteWheel[i]+c[0]/totFit)
+        if totFit>0:
+            rouletteWheel=[0.0]
+            for i,c in enumerate(self.generation):
+                if c[0]>0:
+                    numCellsWithFitNonZero+=1
+                rouletteWheel.append(rouletteWheel[i]+c[0]/totFit)
+        else:
+            rouletteWheel=None
 
         
         #print rouletteWheel
@@ -132,8 +140,8 @@ class cellList:
             #print a
             #print indA
             
-            x=np.random.random()*width
-            y=np.random.random()*height
+            x=np.random.random()*(maxx-minx)+minx
+            y=np.random.random()*(maxy-miny)+miny
             newCells.append(self.generation[indA][1].breed(self.generation[indB][1],(x,y)))
 
         #reset this cellList
