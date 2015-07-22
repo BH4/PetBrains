@@ -40,8 +40,8 @@ class cell:
 
 class smartCell(cell):
     def __init__(self,(x,y)):
-        self.brain=brain(4,4,1,5)
-        self.health=100.0
+        self.brain=brain(numInputs,numOutputs,numHiddenLayers,numPerHidden)
+        self.health=maxHealth
         
         self.x=x
         self.y=y
@@ -60,13 +60,13 @@ class smartCell(cell):
         out=self.brain.evaluate(In)
         m=np.argmax(out)
         if m==0:
-            self.x+=1
+            self.x+=velocity
         elif m==1:
-            self.y+=1
+            self.y+=velocity
         elif m==2:
-            self.x-=1
+            self.x-=velocity
         elif m==3:
-            self.y-=1
+            self.y-=velocity
 
     def bounce(self):
         if self.x > width - self.getRad():
@@ -99,7 +99,7 @@ class smartCell(cell):
         return False
 
     def frame(self,cells):
-        self.health-=.1
+        self.health-=healthSub
         if self.health<=0:
             self.dead=True
         
@@ -118,3 +118,14 @@ class smartCell(cell):
         if eaten:
             return ind
         return None
+
+
+    def breed(self,other,pos):
+        newCell=smartCell(pos)
+        newBrain=self.brain.breed(other.brain)
+        newCell.brain=newBrain
+
+        return newCell
+
+
+        

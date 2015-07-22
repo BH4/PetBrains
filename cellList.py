@@ -46,7 +46,7 @@ class cellList:
         self.cells=nonDead
         for c in dead:
             c.erase()
-        #do i need to return those things?
+
                 
             
     def closestFood(self,x,y):
@@ -78,6 +78,9 @@ class cellList:
             self.frames()
             pygame.display.flip()
 
+        s=sorted(self.generation)[-1]
+        return s
+
     def breed(self):
         #breeds all of the cells in a cellList (that has been run thorugh a generation) selectivly based on fitness
         #returns new cellList of the offspring with some mutations
@@ -97,11 +100,15 @@ class cellList:
             indA=findInWheel(a,rouletteWheel)
             indB=findInWheel(b,rouletteWheel)
 
-            #need to write the breed method in cells then finally in brain
-            self.generation[indA].breed(self.generation[indB])
+            
+            x=np.random.random()*width
+            y=np.random.random()*height
+            newCells.append(self.generation[indA][1].breed(self.generation[indB][1],(x,y)))
 
-
-
+        #reset this cellList
+        self.cells=newCells
+        self.generation=[]
+        self.foodList=randPos(numFood,cell)
 
 
 

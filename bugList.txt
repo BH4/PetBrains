@@ -1,0 +1,5 @@
+-Some cells are not erased correclty when they are on the side of the screen
+
+-food is not erased at the end of a generation so the screen is blacked out instead
+
+-not evolving

@@ -23,8 +23,16 @@ cell.screen=screen
 
 
 pets=cellList(numCells,numFood)
-pets.runGen()
-pets.breed()
+
+
+stats=pets.runGen()
+for i in xrange(numGenerations-1):
+    screen.fill(bgColor)
+    string="Generation " + str(i) + ": Max Fitness="+str(stats[0])
+    print string
+    pets.breed()
+    stats=pets.runGen()
+
 """
 while 1:
     for event in pygame.event.get():
