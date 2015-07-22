@@ -69,6 +69,16 @@ class smartCell(cell):
     def move(self,In):
         #right,down,left,up
         out=self.brain.evaluate(In)
+
+        #normalize vector to correct length
+        mag=np.sqrt(out[0]**2+out[1]**2)
+        const=velocity/mag
+        out[0]*=const
+        out[1]*=const
+
+        self.x+=out[0]
+        self.y+=out[1]
+        """
         m=np.argmax(out)
         if m==0:
             self.x+=velocity
@@ -78,8 +88,10 @@ class smartCell(cell):
             self.x-=velocity
         elif m==3:
             self.y-=velocity
+        """
 
     def bounce(self):
+        """
         if self.x > width:
             self.erase()
             self.x = self.x-width
@@ -109,7 +121,7 @@ class smartCell(cell):
      
         elif self.y < self.getRad():
             self.y = 2*self.getRad() - self.y
-        """
+        
 
     def absorb(self,f):
         

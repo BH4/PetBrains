@@ -74,7 +74,7 @@ class cellList:
         #runs until all of the cells in this set are dead.
         #populates the cellList generation attribute with a list of cells and their fitness
         t=time()
-        while len(self.cells)>0 and time()-t<20:
+        while len(self.cells)>0 and time()-t<maxTime:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -104,20 +104,30 @@ class cellList:
             n.append(self.generation[i])
         self.generation=n
         """
+        
         g=lambda x:x[0]
         totFit=sum(map(g,self.generation))
 
+        numCellsWithFitNonZero=0
         rouletteWheel=[0.0]
         for i,c in enumerate(self.generation):
+            if c[0]>0:
+                numCellsWithFitNonZero+=1
             rouletteWheel.append(rouletteWheel[i]+c[0]/totFit)
 
         
         #print rouletteWheel
         for i in xrange(numCells):
             a=np.random.random()
-            b=np.random.random()
             indA=findInWheel(a,rouletteWheel)
-            indB=findInWheel(b,rouletteWheel)
+            
+            indB=indA
+            while indB==indA:#make sure cells cant breed with themselves (this is ineficient)
+                if numCellsWithFitNonZero>=2:
+                    b=np.random.random()
+                    indB=findInWheel(b,rouletteWheel)
+                else:
+                    indB=int(np.random.uniform(0,len(self.generation)))
             
             #print a
             #print indA

@@ -87,6 +87,8 @@ class brain:
 
     def makeSuperSmart(self):
         s=np.zeros([numOutputs,numInputs])
+        """
+        #Four outputs
         s[0,0]=-1
         s[0,2]=1
         s[1,1]=-1
@@ -95,5 +97,11 @@ class brain:
         s[2,2]=-1
         s[3,1]=1
         s[3,3]=-1
+        """
+        #two outputs
+        s[0,0]=-1
+        s[0,2]=1
+        s[1,1]=-1
+        s[1,3]=1
 
         self.syn=[s]
