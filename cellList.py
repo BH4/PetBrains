@@ -86,7 +86,8 @@ class cellList:
 
             
             self.frames()
-            pygame.display.flip()
+            if displayStuff:
+                pygame.display.flip()
             #sleep(.05)
 
         #append the remaining living cells

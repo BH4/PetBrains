@@ -1,7 +1,7 @@
 width = 800
 height = 600
 bgColor=(0,0,0)
-
+displayStuff=True
 
 minx=0
 miny=0
@@ -11,7 +11,7 @@ maxy=600
 
 numCells=20
 numFood=20
-numGenerations=3000
+numGenerations=30000
 
 #cell
 velocity=4

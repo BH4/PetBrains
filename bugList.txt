@@ -3,19 +3,17 @@ Unresolved
 
 -food is not erased at the end of a generation so the screen is blacked out instead
 
--not evolving
-after inserting an inteligent cell into the simulation it was able to find food well and breed to create the next generation in the correct
-proportion, but these new cells were idiots.
-=Was seemingly able to resolve the problem by changing the input neurons. instead of passing
 
--can get error when best fitness is 0
-
--
 
 Resolved?
-
-
+-can get error when best fitness is 0
 
 
 
 Resolved.
+-not evolving
+after inserting an inteligent cell into the simulation it was able to find food well and breed to create the next generation in the correct
+proportion, but these new cells were idiots.
+=Was seemingly able to resolve the problem by changing the input neurons. instead of passing positions of all food I only pass the closest food
+However, I suspect this may have only resolved the problem because in the first round of breeding this individual was allowed to breed with itself
+causing little to no genetic variation. More tests are necessary

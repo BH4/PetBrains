@@ -33,13 +33,15 @@ class cell:
     
     #draws a circle representing the cell
     def display(self):
-        pygame.draw.circle(cell.screen, self.color, (int(self.x-cell.screenPos[0]),int(self.y-cell.screenPos[1])), int(self.getRad()), self.thickness)
+        if displayStuff:
+            pygame.draw.circle(cell.screen, self.color, (int(self.x-cell.screenPos[0]),int(self.y-cell.screenPos[1])), int(self.getRad()), self.thickness)
 
     #draws a circle in the same position as the cell but in the background color
     #hopefully this method is faster than drawing over the entire screen with
     #screen.fill(bgColor)
     def erase(self):
-        pygame.draw.circle(cell.screen, bgColor, (int(self.x-cell.screenPos[0]),int(self.y-cell.screenPos[1])), int(self.getRad()), self.thickness)
+        if displayStuff:
+            pygame.draw.circle(cell.screen, bgColor, (int(self.x-cell.screenPos[0]),int(self.y-cell.screenPos[1])), int(self.getRad()), self.thickness)
     
     def frame(self):
         self.erase()
